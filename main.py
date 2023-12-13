@@ -1,4 +1,6 @@
 import sys
+import time
+
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QDesktopWidget, QHBoxLayout
 from PyQt5.QtGui import QPixmap, QPainter, QFont, QTransform, QPen
 from PyQt5.QtCore import Qt, QTimer, QPointF, QUrl
@@ -17,6 +19,7 @@ games = {
     "Rotation": "Rotate yourself \n in place 10 times in circle, \n and walk in a straight line \n ",
     "Dance": "Mimic the video, \n dance with Gangnam style \n ",
     "Thousand-year Egg": "Eat Thousand-year Egg \n ",
+    "Hot Noodles": "Eat the super spicy \n hot-chicken noodles \n ",
     "Self-portrait": "Blindfold yourself \n and attempt to draw\n a self-portrait \n within one minute \n ",
     "Imitation ": "Imitate an animal \n ",
 }
@@ -28,6 +31,7 @@ class CardDrawApp(QWidget):
         super().__init__()
 
         self.initUI()
+        self.time_start = time.time()
 
     def initUI(self):
         screen = QDesktopWidget().screenGeometry()
@@ -131,10 +135,17 @@ class CardDrawApp(QWidget):
         return rotated_pixmap
 
     def showDrawnCard(self):
-        idx = random.randint(0, len(game_keys) - 1)
-        game = games[game_keys[idx]]
-        self.ring_text = game_keys[idx]
-        self.card_text = game
+        time_used = (time.time() - self.time_start) / 60
+        prob = min(0.7, time_used / 90)
+        print(prob)
+        if random.random() < prob:
+            self.ring_text = "Merry Christmas!"
+            self.card_text = "Secret Santa has \n left a gift for you! \n Please find it!"
+        else:
+            idx = random.randint(0, len(game_keys) - 1)
+            game = games[game_keys[idx]]
+            self.ring_text = game_keys[idx]
+            self.card_text = game
         self.updateCardImage()
 
 
